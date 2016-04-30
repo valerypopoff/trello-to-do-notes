@@ -1,6 +1,4 @@
 var colored = false;
-var colors = {today: "red", tomorrow: "orange", someday: "green"};
-
 
 var months = 
 {
@@ -76,123 +74,9 @@ var months =
 };
 
 
-function hsvToRgb(h, s, v) {
-	var r, g, b;
-	var i;
-	var f, p, q, t;
- 
-	// Make sure our arguments stay in-range
-	h = Math.max(0, Math.min(360, h));
-	s = Math.max(0, Math.min(100, s));
-	v = Math.max(0, Math.min(100, v));
- 
-	// We accept saturation and value arguments from 0 to 100 because that's
-	// how Photoshop represents those values. Internally, however, the
-	// saturation and value are calculated from a range of 0 to 1. We make
-	// That conversion here.
-	s /= 100;
-	v /= 100;
- 
-	if(s == 0) {
-		// Achromatic (grey)
-		r = g = b = v;
-		return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-	}
- 
-	h /= 60; // sector 0 to 5
-	i = Math.floor(h);
-	f = h - i; // factorial part of h
-	p = v * (1 - s);
-	q = v * (1 - s * f);
-	t = v * (1 - s * (1 - f));
- 
-	switch(i) {
-		case 0:
-			r = v;
-			g = t;
-			b = p;
-			break;
- 
-		case 1:
-			r = q;
-			g = v;
-			b = p;
-			break;
- 
-		case 2:
-			r = p;
-			g = v;
-			b = t;
-			break;
- 
-		case 3:
-			r = p;
-			g = q;
-			b = v;
-			break;
- 
-		case 4:
-			r = t;
-			g = p;
-			b = v;
-			break;
- 
-		default: // case 5:
-			r = v;
-			g = p;
-			b = q;
-	}
- 
-	return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-}
-
-function rgbToHex(r, g, b) 
-{
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-}
-
-
-function name2hex( name )
-{
-	var h = crc32(name) % 360;
-	var rgb = hsvToRgb( h, 7, 92);
-	
-	return rgbToHex( rgb[0], rgb[1], rgb[2] );
-}
-
-var makeCRCTable = function(){
-    var c;
-    var crcTable = [];
-    for(var n =0; n < 256; n++){
-        c = n;
-        for(var k =0; k < 8; k++){
-            c = ((c&1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
-        }
-        crcTable[n] = c;
-    }
-    return crcTable;
-}
-
-var crc32 = function(str) {
-    var crcTable = window.crcTable || (window.crcTable = makeCRCTable());
-    var crc = 0 ^ (-1);
-
-    for (var i = 0; i < str.length; i++ ) {
-        crc = (crc >>> 8) ^ crcTable[(crc ^ str.charCodeAt(i)) & 0xFF];
-    }
-
-    return (crc ^ (-1)) >>> 0;
-};
-
-
-
 function css()
 {
-	$("head").append("<link id='newcss' href='"+ chrome.runtime.getURL("color.css") +"' type='text/css' rel='stylesheet' />");	
-	
-	//$(".focus .checklist-new-item-text").attr("placeholder", "foo");
-	
-	//$(".window").css("background-color", name2hex( $(".window-title-text").html() ));	
+	$("head").append("<link id='newcss' href='"+ chrome.runtime.getURL("color.css") +"' type='text/css' rel='stylesheet' />");		
 }
 
 function color_dates()
@@ -206,7 +90,6 @@ function color_dates()
 		{
 			var date = splt[splt.length-1];
 			date = $.trim(date);
-			//console.log( date );
 			
 			var splt2 = date.split(" ");
 
@@ -236,41 +119,32 @@ function color_dates()
 			var tomorrow = new Date(today.valueOf() + 86400000);
 			
 			var then = new Date( now.getFullYear(), months[month.toLowerCase()], parseInt(day));
-			//console.log( then );
 			
 			if( then.valueOf() <= today.valueOf() )
 			{
-				//this.style.color = colors["today"];
-
 				$(this).removeClass( "today" );
 				$(this).removeClass( "tomorrow" );
 				$(this).removeClass( "someday" );
 
 				$(this).addClass( "today" );
-				//console.log("today");
 			} else
 
 			if( then.valueOf() == tomorrow.valueOf() )
 			{
-				//this.style.color = colors["tomorrow"];
 				$(this).removeClass( "today" );
 				$(this).removeClass( "tomorrow" );
 				$(this).removeClass( "someday" );
 
 				$(this).addClass( "tomorrow" );
-				//console.log("tomorrow");
 			} else
 			
 			if( then.valueOf() > tomorrow.valueOf() )
 			{			
-				//this.style.color = colors["tomorrow"];
 				$(this).removeClass( "today" );
 				$(this).removeClass( "tomorrow" );
 				$(this).removeClass( "someday" );
 
 				$(this).addClass( "someday" );
-				//this.style.color = colors["someday"];
-				//console.log("someday");
 			}			
 		}
 		
@@ -336,26 +210,3 @@ $(document).ready(function ()
 
 
 
-
-
-
-
-//$(document).ready(function () 
-//$(window).onload(function () 
-//$( document ).ajaxComplete(function()
-//$(".window-wrapper").hover(function()
-/*
-$(".window-header-icon").hover(function()
-{
-	console.log("gotcha");
-	//color();
-});
-*/
-
-
-/*
-( !$(".window-header-icon").hover(function(){console.log("gotcha");}).length )
-{
-	console.log("trying");
-};
-*/
