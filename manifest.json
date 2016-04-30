@@ -3,7 +3,7 @@
     
     "name":"Trello Scheduler",
     "description":"Turns a bunch of cards into a handy dashboard. Just open a card and resize browser window to a small list. It also highlights urgent tasks if you provide deadlines like this: / apr 28",
-    "version":"0.9",
+    "version":"0.9.1",
     
 	
 	"browser_action": 

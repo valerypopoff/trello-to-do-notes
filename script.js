@@ -79,75 +79,97 @@ function css()
 	$("head").append("<link id='newcss' href='"+ chrome.runtime.getURL("color.css") +"' type='text/css' rel='stylesheet' />");		
 }
 
-function color_dates()
+function parse_dates()
 {
 	$(".checklist-item").not(".checklist-item-state-complete").each(function(i)
 	{
 		var text = $(this).find(".checklist-item-details-text").text();
 		var splt = text.split("/");
 		
+		//если есть хоть одна косая черта
 		if( splt.length > 1 )
 		{
 			var date = splt[splt.length-1];
 			date = $.trim(date);
 			
+			
 			var splt2 = date.split(" ");
-
-			/*
-			var day = splt2[0];
-			var month = splt2[1];
-			*/
-
-			var day;
-			var month;
-
-			if( isNaN(parseInt(splt2[0])) )
+			
+			//если после косой черты два слова
+			if( splt2.length > 1 )
 			{
-				month = splt2[0];				
-				day = splt2[1];
-			} else
+				var day;
+				var month;
+
+				if( isNaN(parseInt(splt2[0])) )
+				{
+					month = splt2[0];				
+					day = splt2[1];
+				} else
+				{
+					day = splt2[0];
+					month = splt2[1];
+				}
+			
+				//console.log(parseInt(splt2[0]) + "--" + (parseInt(splt2[0]) === 'NaN'));
+				//console.log( "day: " + day + "--" + "month: " + months[month.toLowerCase()] );
+
+				var now = new Date;
+				var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+				var tomorrow = new Date(today.valueOf() + 86400000);
+
+				var then = new Date( now.getFullYear(), months[month.toLowerCase()], parseInt(day));
+				//console.log(then);
+			
+				if( then == 'Invalid Date' )
+				{
+					$(this).removeClass( "today" );
+					$(this).removeClass( "tomorrow" );
+					$(this).removeClass( "someday" );
+					
+					return;
+				} 
+								
+				if( then.valueOf() <= today.valueOf() )
+				{
+					$(this).removeClass( "today" );
+					$(this).removeClass( "tomorrow" );
+					$(this).removeClass( "someday" );
+
+					$(this).addClass( "today" );
+				} else
+
+				if( then.valueOf() == tomorrow.valueOf() )
+				{
+					$(this).removeClass( "today" );
+					$(this).removeClass( "tomorrow" );
+					$(this).removeClass( "someday" );
+
+					$(this).addClass( "tomorrow" );
+				} else
+			
+				if( then.valueOf() > tomorrow.valueOf() )
+				{			
+					$(this).removeClass( "today" );
+					$(this).removeClass( "tomorrow" );
+					$(this).removeClass( "someday" );
+
+					$(this).addClass( "someday" );
+				}			
+			} else //если после косой черты менее двух слов
 			{
-				day = splt2[0];
-				month = splt2[1];
+				$(this).removeClass( "today" );
+				$(this).removeClass( "tomorrow" );
+				$(this).removeClass( "someday" );
+				
+				//console.log("no date");
 			}
-			
-			//console.log(parseInt(splt2[0]) + "--" + (parseInt(splt2[0]) === 'NaN'));
-			//console.log( "day: " + day + "--" + "month: " + months[month.toLowerCase()] );
-			
-			var now = new Date;
-			var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-			var tomorrow = new Date(today.valueOf() + 86400000);
-			
-			var then = new Date( now.getFullYear(), months[month.toLowerCase()], parseInt(day));
-			
-			if( then.valueOf() <= today.valueOf() )
-			{
-				$(this).removeClass( "today" );
-				$(this).removeClass( "tomorrow" );
-				$(this).removeClass( "someday" );
-
-				$(this).addClass( "today" );
-			} else
-
-			if( then.valueOf() == tomorrow.valueOf() )
-			{
-				$(this).removeClass( "today" );
-				$(this).removeClass( "tomorrow" );
-				$(this).removeClass( "someday" );
-
-				$(this).addClass( "tomorrow" );
-			} else
-			
-			if( then.valueOf() > tomorrow.valueOf() )
-			{			
-				$(this).removeClass( "today" );
-				$(this).removeClass( "tomorrow" );
-				$(this).removeClass( "someday" );
-
-				$(this).addClass( "someday" );
-			}			
+		} else //если вообще нет косой черты
+		{
+			$(this).removeClass( "today" );
+			$(this).removeClass( "tomorrow" );
+			$(this).removeClass( "someday" );
 		}
-		
 		
 	});
 
@@ -159,11 +181,11 @@ function do_magic()
 	return;
 	
 	css();
-	color_dates();
+	parse_dates();
 
 	$(".checklist").bind("DOMSubtreeModified", function() 
 	{
-		color_dates();
+		parse_dates();
 	});
 	
 	$(document).on("keydown", function(e) 
@@ -187,6 +209,7 @@ function undo_magic()
 	return;
 
 	$("#newcss").remove();
+	console.log("removed");
 	
 	$(".checklist").bind("DOMSubtreeModified", undefined );
 
