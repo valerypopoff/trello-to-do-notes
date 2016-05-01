@@ -1,4 +1,46 @@
+/*
+$(document).ready(function ()  
+{
+	
+
+	if( window.name != "small" )
+	{
+		var newWin = window.open( window.location.href , "small", "menubar=yes, toolbar=yes, left=" + window.screenX + ", top=" + window.screenY + ", width=" + window.outerWidth + ", height="+window.outerHeight);
+		window.close();
+	}
+
+
+});	
+
+*/
+
+
+if (window.top === window) 
+{
+
+
 var colored = false;
+
+
+if ( bowser.safari )
+{
+	//console.log("im safari");
+	var name = safari.extension.baseURI + 'color.css';
+	var size = 550;
+} 
+else if ( bowser.chrome )
+{
+	//console.log("im chrome");
+	var name = chrome.runtime.getURL("color.css");
+	var size = 450;
+} 
+else
+{
+	var name = chrome.runtime.getURL("color.css");
+	var size = 650;
+}
+
+
 
 var months = 
 {
@@ -76,7 +118,7 @@ var months =
 
 function css()
 {
-	$("head").append("<link id='newcss' href='"+ chrome.runtime.getURL("color.css") +"' type='text/css' rel='stylesheet' />");		
+	$("head").append("<link id='newcss' href='"+ name +"' type='text/css' rel='stylesheet' />");	
 }
 
 function parse_dates()
@@ -180,6 +222,9 @@ function do_magic()
 	if( colored )
 	return;
 	
+	//if ( bowser.safari )
+	window.resizeTo(350, window.outerHeight);
+
 	css();
 	parse_dates();
 
@@ -199,7 +244,7 @@ function do_magic()
 			$(".window").removeClass( "marked" )			
 		}    			
 	});
-
+	
 	colored = true;
 }
 
@@ -209,7 +254,7 @@ function undo_magic()
 	return;
 
 	$("#newcss").remove();
-	console.log("removed");
+	//console.log("removed");
 	
 	$(".checklist").bind("DOMSubtreeModified", undefined );
 
@@ -218,18 +263,18 @@ function undo_magic()
 
 $(document).ready(function ()  
 {
-	if( $(window).width() <= 500 )
+	if( $(window).width() <= size )
 	do_magic();
 
 	$(window).bind("resize", function() 
 	{
-		if( $(window).width() <= 500 )
+		if( $(window).width() <= size )
 		{
 			do_magic();
 		}
 		else undo_magic();	
 	});
-});
+});	
 
 
-
+} 

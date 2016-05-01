@@ -2,8 +2,8 @@
     "manifest_version": 2,
     
     "name":"Trello Scheduler",
-    "description":"Turns a bunch of cards into a handy dashboard. Just open a card and resize browser window to a small list. It also highlights urgent tasks if you provide deadlines like this: / apr 28",
-    "version":"0.9.1",
+    "description":"Turns a bunch of cards into a handy dashboard on your desktop. Just open a card and resize browser window to a small list. It also highlights urgent tasks if you provide deadlines like this: / Apr 30",
+    "version":"0.9.2",
     
 	
 	"browser_action": 
@@ -21,7 +21,7 @@
     [
         {
             "matches":["https://trello.com/*"],
-            "js":["jquery.js", "script.js"]
+            "js":["jquery.js", "bowser.min.js", "script.js"]
         }
     ],
     
