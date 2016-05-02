@@ -36,6 +36,7 @@ else if ( bowser.chrome )
 } 
 else
 {
+	//console.log("im another browser");
 	var name = chrome.runtime.getURL("color.css");
 	var size = 650;
 }
@@ -122,7 +123,7 @@ function css()
 }
 
 function parse_dates()
-{
+{	
 	$(".checklist-item").not(".checklist-item-state-complete").each(function(i)
 	{
 		var text = $(this).find(".checklist-item-details-text").text();
@@ -130,7 +131,7 @@ function parse_dates()
 		
 		//если есть хоть одна косая черта
 		if( splt.length > 1 )
-		{
+		{			
 			var date = splt[splt.length-1];
 			date = $.trim(date);
 			
@@ -261,7 +262,7 @@ function undo_magic()
 	colored = false;
 }
 
-$(document).ready(function ()  
+function all_stuff()
 {
 	if( $(window).width() <= size )
 	do_magic();
@@ -274,6 +275,16 @@ $(document).ready(function ()
 		}
 		else undo_magic();	
 	});
+}
+
+$(document).ready(function ()  
+{
+	var time = 0;
+	
+	if( bowser.safari )
+	time = 1000;
+	
+	setTimeout( all_stuff, time );	
 });	
 
 
