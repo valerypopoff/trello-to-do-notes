@@ -5,7 +5,7 @@
 	<key>Author</key>
 	<string>Valera Popov</string>
 	<key>Builder Version</key>
-	<string>11601.1.56</string>
+	<string>11601.7.7</string>
 	<key>CFBundleDisplayName</key>
 	<string>Trello Scheduler</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.9.2</string>
+	<string>0.9.4</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>Content</key>
@@ -23,6 +23,7 @@
 			<key>End</key>
 			<array>
 				<string>bowser.min.js</string>
+				<string>majic.js</string>
 				<string>script.js</string>
 			</array>
 			<key>Start</key>

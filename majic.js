@@ -260,7 +260,6 @@ function all_stuff()
 }
 
 
-//do_magic();
 
 
 
