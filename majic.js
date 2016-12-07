@@ -200,8 +200,8 @@ function parse_dates()
 
 function do_magic()
 {
-	if( colored )
-	return;
+	//if( colored )
+	//return;
 	
 	//if ( bowser.safari )
 	window.resizeTo(350, window.outerHeight);
@@ -231,8 +231,8 @@ function do_magic()
 
 function undo_magic()
 {
-	if( !colored )
-	return;
+	//if( !colored )
+	//return;
 
 	$("#newcss").remove();
 	//console.log("removed");
