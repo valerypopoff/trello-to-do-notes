@@ -200,8 +200,8 @@ function parse_dates()
 
 function do_magic()
 {
-	//if( colored )
-	//return;
+	if( colored )
+	return;
 	
 	//if ( bowser.safari )
 	window.resizeTo(350, window.outerHeight);
@@ -226,7 +226,7 @@ function do_magic()
 		}    			
 	});
 	
-	colored = true;
+	//colored = true;
 }
 
 function undo_magic()
@@ -239,7 +239,7 @@ function undo_magic()
 	
 	$(".checklist").bind("DOMSubtreeModified", undefined );
 
-	colored = false;
+	//colored = false;
 }
 
 
@@ -254,8 +254,13 @@ function all_stuff()
 		if( $(window).width() <= size )
 		{
 			do_magic();
+			colored = true;
 		}
-		else undo_magic();	
+		else
+		{
+			undo_magic();	
+			colored = false;
+		}
 	});
 }
 
