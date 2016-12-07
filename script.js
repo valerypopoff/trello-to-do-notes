@@ -283,6 +283,9 @@ $(document).ready(function ()
 	
 	if( bowser.safari )
 	time = 1000;
+
+	if( bowser.chrome )
+	time = 300;
 	
 	setTimeout( all_stuff, time );	
 });	
