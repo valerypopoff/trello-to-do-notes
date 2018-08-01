@@ -7,13 +7,13 @@
 	<key>Builder Version</key>
 	<string>11601.7.7</string>
 	<key>CFBundleDisplayName</key>
-	<string>Trello Scheduler</string>
+	<string>Trello To-do Notes</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.yourcompany.trelloscheduler</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.9.4</string>
+	<string>0.9.7</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>Content</key>

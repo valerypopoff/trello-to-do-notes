@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
     
-    "name":"Trello Scheduler",
-    "description":"Turns a bunch of cards into a handy dashboard on your desktop. Just open a card and resize browser window to a small list. It also highlights urgent tasks if you provide deadlines like this: / Apr 30",
-    "version":"0.9.4",
+    "name":"Trello To-do Notes",
+    "description":"Turns trello cards into a handy dashboard on your desktop. It highlights urgent tasks if you provide deadlines like this: / Apr 30",
+    "version":"0.9.7",
 
     "permissions": 
     [
