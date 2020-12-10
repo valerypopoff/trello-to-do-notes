@@ -44,7 +44,17 @@
 	display: none;
 }
 
+/* скрыть строчку с названием чеклиста и кнопками типа показать/скрыть отмеченные */
+.window-module-title
+{
+   display: none;
+}
 
+/* скрыть подзаголовок «In list ...» */
+.window-header-inline-content
+{
+   display: none;	
+}
 
 .window
 {
@@ -58,16 +68,31 @@
 	background-color: #e8d9cc;	
 }
 
+.inactive
+{
+	opacity: 0.2;
+}
+
 .window-header
 {
+	/*
 	padding: 0;
 	padding-bottom: 10px;
 	margin-left: 26px;	
 	margin-right: 26px;
-	margin-top: 16px;
+	margin-top: 10px;
 		
 	border-bottom: 2px solid #b0afa0;
-	
+	*/
+
+
+	margin: 0;
+    margin-top: -1px;
+    padding-left: 26px;
+    padding-right: 26px;
+    padding-top: 10px;
+    padding-bottom: 4px;
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .window-main-col
@@ -76,7 +101,7 @@
 
 	margin-left: 26px !important;	
 	margin-right: 20px !important;		
-	margin-top: 20px !important;
+	/*margin-top: 20px !important;*/
 }
 
 
@@ -105,7 +130,10 @@
 
 .checklist-item
 {
-	padding-left: 33px !important;
+	padding-left: 30px !important;
+	line-height: 1.2em;
+	margin-bottom: -1px;
+	font-size: 0.97em;
 }
 
 .checklist-item-menu-wrapper
@@ -124,8 +152,57 @@
 .checklist-new-item
 {
 	margin-left: 0;
-	margin-top: 10px;
+	margin-top: 4px;
 }
+
+.checklist-new-item button
+{
+	padding: 2px 26px;
+    font-size: 0.85em;
+}
+
+
+.checklist-list.window-module
+{
+	margin-bottom: 100px;
+}
+
+
+
+/* Sublists */
+
+.sublist /*div.checklist-item-details*/
+{
+	margin-left: 27px;
+	padding-left: 27px !important;
+}
+
+.sublist .checklist-item-checkbox
+{
+	width: 13px;
+	height: 13px;
+
+	margin-top: 9px;
+}
+
+
+
+
+
+/*hide checkboxes for unhovered italic items*/
+
+.italic .checklist-item-checkbox
+{
+	display: none;
+}
+
+.italic:hover .checklist-item-checkbox
+{
+	display: block;
+}
+
+
+
 
 .known-service-link
 {

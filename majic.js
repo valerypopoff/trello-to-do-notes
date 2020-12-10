@@ -1,4 +1,7 @@
 var colored = false;
+var resize_bound = false;
+var keys_bound = false;
+var updater = undefined;
 
 if ( bowser.safari )
 {
@@ -11,7 +14,6 @@ else if ( bowser.chrome )
 	//console.log("im chrome");
 	var name = chrome.runtime.getURL("color.css");
 	var size = 450;
-
 	
 } 
 else
@@ -20,8 +22,6 @@ else
 	var name = chrome.runtime.getURL("color.css");
 	var size = 650;
 }
-
-
 
 var months = 
 {
@@ -96,6 +96,13 @@ var months =
 	"dec":11
 };
 
+function getLang()
+{
+	if (navigator.languages != undefined) 
+		return navigator.languages[0]; 
+	else 
+		return navigator.language;
+}
 
 function css()
 {
@@ -108,7 +115,24 @@ function parse_dates()
 	{
 		var text = $(this).find(".checklist-item-details-text").text();
 		var splt = text.split("/");
+
+		var italic = $(this).find("em").length;
 		
+		
+		// если начинается с --
+		if( text.indexOf("  ") == 0 )
+			$(this).addClass( "sublist" );
+		else
+			$(this).removeClass( "sublist" );
+
+
+		// если курсив
+		if( italic > 0 )
+			$(this).addClass( "italic" );
+		else
+			$(this).removeClass( "italic" );
+
+
 		//если есть хоть одна косая черта
 		if( splt.length > 1 )
 		{			
@@ -152,8 +176,11 @@ function parse_dates()
 					
 					return;
 				} 
-								
-				if( then.valueOf() <= today.valueOf() )
+
+				if( 
+					(then.valueOf() <= today.valueOf() && (( today.valueOf() - then.valueOf() ) <  1000*60*60*24*365/2)) || 
+				 	(then.valueOf() >  today.valueOf() && (( then.valueOf() - today.valueOf() ) >= 1000*60*60*24*365/2))
+				)
 				{
 					$(this).removeClass( "today" );
 					$(this).removeClass( "tomorrow" );
@@ -198,70 +225,129 @@ function parse_dates()
 
 }
 
-function do_magic()
+function do_magic(force, from_button)
 {
-	if( colored )
+	if( colored && !force)
 	return;
 	
 	//if ( bowser.safari )
-	window.resizeTo(350, window.outerHeight);
+		//window.resizeTo(350, window.outerHeight);
 
-	css();
+	if( from_button && window.locationbar.visible )
+	{
+		var newwin = window.open(window.location.href,"window_"+Math.round(Math.random()*100000),'height=200, width=150');
+		
+		//window.close();
+		if( from_button )
+		return;
+	}
+
+
+	if( !colored )
+		css();
+
 	parse_dates();
 
-	$(".checklist").bind("DOMSubtreeModified", function() 
+	$(".checklist").off("DOMSubtreeModified").bind("DOMSubtreeModified", function() 
 	{
 		parse_dates();
 	});
 	
-	$(document).on("keydown", function(e) 
-	{ 
-    	if ( e.shiftKey && ( e.which == 77 ) )
- 		{
-			if( !$(".window").hasClass("marked") ) 
-			$(".window").addClass( "marked" )
-			
-			else
-			$(".window").removeClass( "marked" )			
-		}    			
-	});
-	
-	//colored = true;
+	if( !keys_bound )
+	{
+		keys_bound = true;
+
+		$(document).off("keydown").on("keydown", function(e) 
+		{ 
+	    	// Mark red
+	    	if( e.shiftKey && ( e.which == 77 ) && document.activeElement.type != "textarea" )
+	 		{
+				//console.log(document.activeElement.type)
+
+				if( !$(".window").hasClass("marked") ) 
+					$(".window").addClass( "marked" )
+				else
+					$(".window").removeClass( "marked" )			
+			}    			
+
+	    	// Mark inactive
+	    	if( e.shiftKey && ( e.which == 85 ) && document.activeElement.type != "textarea" )
+	 		{
+				if( !$(".window-wrapper").hasClass("inactive") ) 
+					$(".window-wrapper").addClass( "inactive" )
+				else
+					$(".window-wrapper").removeClass( "inactive" )			
+			}    			
+
+			// Insert today's date
+			if( e.metaKey && e.altKey && e.which == 84 && document.activeElement.type == "textarea" )
+			{
+				//console.log("T")
+				var date = (new Date).getDate();
+				var addendum = (new Date).toLocaleString(getLang(), { month: 'short' }).substr(0,3);
+				
+				document.activeElement.value += " / " + date + " " + addendum;
+
+				var begin_pos = document.activeElement.value.length-(""+date+" "+addendum).length
+				document.activeElement.setSelectionRange(begin_pos, begin_pos + (""+date).length)
+			}
+		});
+	}
+
 }
 
 function undo_magic()
 {
-	//if( !colored )
-	//return;
+	clearTimeout(updater);
 
 	$("#newcss").remove();
-	//console.log("removed");
 	
-	$(".checklist").bind("DOMSubtreeModified", undefined );
-
-	//colored = false;
+	//$(".checklist").off("DOMSubtreeModified").bind("DOMSubtreeModified", undefined );
+	$(".checklist").off("DOMSubtreeModified");
 }
 
 
 
 function all_stuff()
 {
-	if( $(window).width() <= size )
+	if( /*$(window).width()*/ window.outerWidth <= size )
 	do_magic();
 
-	$(window).bind("resize", function() 
+	if( !resize_bound )
 	{
-		if( $(window).width() <= size )
+		resize_bound = true;
+
+		$(window).off("resize").bind("resize", function() 
 		{
-			do_magic();
+			if( /*$(window).width()*/ window.outerWidth <= size )
+			{
+				do_magic();
+				colored = true;
+			}
+			else
+			{
+				undo_magic();	
+				colored = false;
+			}
+		});
+	}
+
+	
+	
+	// Update every 5 mins --------
+	
+	clearTimeout(updater);
+
+	updater = setInterval( ()=>
+	{
+		if( /*$(window).width()*/ window.outerWidth <= size )
+		{
+			//force color
+			do_magic(true);
 			colored = true;
 		}
-		else
-		{
-			undo_magic();	
-			colored = false;
-		}
-	});
+	
+	}, 300000 ); // 300 sec
 }
 
 

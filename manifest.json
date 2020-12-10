@@ -3,7 +3,7 @@
     
     "name":"Trello To-do Notes",
     "description":"Turns trello cards into a handy dashboard on your desktop. It highlights urgent tasks if you provide deadlines like this: / Apr 30",
-    "version":"0.9.7",
+    "version":"0.9.8",
 
     "permissions": 
     [

@@ -14,9 +14,11 @@ $(document).ready(function ()
 
 */
 
-if (window.top === window) 
-{
 
+
+
+//if (window.top === window) 
+//{
 
 
 $(document).ready(function ()  
@@ -29,8 +31,8 @@ $(document).ready(function ()
 	if( bowser.chrome )
 	time = 500;
 	
-	setTimeout( all_stuff, time );	
+	setTimeout( all_stuff, time+800 );	
 });	
 
 
-} 
+//}
