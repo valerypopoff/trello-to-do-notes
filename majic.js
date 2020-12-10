@@ -235,7 +235,7 @@ function do_magic(force, from_button)
 
 	if( from_button && window.locationbar.visible )
 	{
-		var newwin = window.open(window.location.href,"window_"+Math.round(Math.random()*100000),'height=200, width=150');
+		var newwin = window.open(window.location.href,"window_"+Math.round(Math.random()*100000),'height=200, width=350');
 		
 		//window.close();
 		if( from_button )

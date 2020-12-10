@@ -149,6 +149,11 @@
     display: none;
 }
 
+.checklist-item-controls
+{
+	display: none !important;
+}
+
 .checklist-new-item
 {
 	margin-left: 0;
