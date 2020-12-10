@@ -7,8 +7,8 @@
 
     "permissions": 
     [
-        "http://*/*", 
-        "https://*/*"
+        "http://trello.com/*", 
+        "https://trello.com/*"
     ],
     
     "background": 
